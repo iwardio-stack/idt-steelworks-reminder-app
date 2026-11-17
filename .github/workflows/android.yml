@@ -32,7 +32,7 @@ jobs:
       - name: Extract Android project
         run: unzip -o IDT_Client_Reminder_App_v2.zip -d .
 
-      - name: Replace complete Android build file
+      - name: Configure complete Android build
         run: |
           cat > app/build.gradle.kts <<'EOF'
           plugins {
@@ -64,6 +64,7 @@ jobs:
 
           dependencies {
               implementation("androidx.core:core-ktx:1.15.0")
+              implementation("androidx.activity:activity-ktx:1.10.0")
           }
           EOF
 
