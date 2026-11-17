@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -31,6 +31,41 @@ jobs:
 
       - name: Extract Android project
         run: unzip -o IDT_Client_Reminder_App_v2.zip -d .
+
+      - name: Replace complete Android build file
+        run: |
+          cat > app/build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application")
+              id("org.jetbrains.kotlin.android")
+          }
+
+          android {
+              namespace = "za.co.idt.reminders"
+              compileSdk = 35
+
+              defaultConfig {
+                  applicationId = "za.co.idt.reminders"
+                  minSdk = 26
+                  targetSdk = 35
+                  versionCode = 2
+                  versionName = "2.0"
+              }
+
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+
+              kotlinOptions {
+                  jvmTarget = "17"
+              }
+          }
+
+          dependencies {
+              implementation("androidx.core:core-ktx:1.15.0")
+          }
+          EOF
 
       - name: Build Android APK
         run: gradle assembleDebug
